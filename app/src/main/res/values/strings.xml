@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Movie app</string>
+    <string name="api_key">f5842cc12eef14f985782ec2ae121db7</string>
+    <string name="image_paht">https://image.tmdb.org/t/p/w342</string>
+</resources>
