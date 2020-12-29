@@ -35,13 +35,13 @@ public class SingleMovie extends AppCompatActivity {
         movieViewModel = new ViewModelProvider(this).get(SingleMovieViewModel.class);
 
 
-        Log.d(TAG, "onCreate: ");
         updateUi();
 
     }
 
     private void updateUi() {
-        movieViewModel.getMyMovieDetail(682377).observe(this, movieDetails -> {
+        movieViewModel.getMyMovieDetail(getIntent().getIntExtra("id", 1))
+                .observe(this, movieDetails -> {
             Log.d(TAG, "onCreate: onChange");
             Log.d(TAG, "onCreate: " + movieDetails.toString());
             updateMovieDetails(movieDetails);
@@ -66,6 +66,7 @@ public class SingleMovie extends AppCompatActivity {
     }
 
     private void checkNetworkStatus() {
+
         movieViewModel.getNetworkStatus().observe(this, status -> {
             Log.d(TAG, "checkNetworkStatus: status : " + status.name());
             if (status == Status.FAILED_)

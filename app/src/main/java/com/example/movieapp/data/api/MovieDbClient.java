@@ -3,6 +3,7 @@ package com.example.movieapp.data.api;
 import android.util.Log;
 
 import com.example.movieapp.data.pojo.MovieDetailes;
+import com.example.movieapp.data.pojo.MovieResponse;
 import com.google.gson.internal.$Gson$Preconditions;
 
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class MovieDbClient {
     public static MovieDbInterface movieDbInterface;
     public static final String apiKey = "f5842cc12eef14f985782ec2ae121db7";
     private static final String TAG = "MovieDbClient myTag";
+    public static final int FIRST_PAGE = 1;
+    public static final int POST_PER_PAGE = 20;
 
     public MovieDbClient() {
         Log.d(TAG, "MovieDbClient: constructor");
@@ -56,5 +59,8 @@ public class MovieDbClient {
         return movieDbInterface.getMovieDetails(movieId);
     }
 
+    public Single<MovieResponse> getMovies(int page) {
+        return movieDbInterface.getMovie(page);
+    }
 
 }

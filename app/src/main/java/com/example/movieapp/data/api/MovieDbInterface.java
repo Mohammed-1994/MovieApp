@@ -1,6 +1,7 @@
 package com.example.movieapp.data.api;
 
 import com.example.movieapp.data.pojo.MovieDetailes;
+import com.example.movieapp.data.pojo.MovieResponse;
 
 import io.reactivex.Single;
 import retrofit2.Call;
@@ -24,8 +25,9 @@ public interface MovieDbInterface {
     //https://image.tmdb.org/t/p/w342/ajKpYK7XdzIYjy9Uy8nkgRboKyv.jpg
 
 
-    @GET("movie/{movie_id}" )
+    @GET("movie/{movie_id}")
     Single<MovieDetailes> getMovieDetails(@Path("movie_id") int id);
 
-
+    @GET("movie/popular")
+    Single<MovieResponse> getMovie(@Query("page") int page);
 }

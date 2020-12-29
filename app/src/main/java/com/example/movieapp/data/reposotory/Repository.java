@@ -2,14 +2,12 @@ package com.example.movieapp.data.reposotory;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.movieapp.data.api.MovieDbClient;
 import com.example.movieapp.data.pojo.MovieDetailes;
-import com.example.movieapp.movieDetails.MovieDetailesRepo;
+import com.example.movieapp.data.pojo.MovieResponse;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.CompositeDisposable;
@@ -60,6 +58,42 @@ public class Repository {
                 .subscribe(observer);
 
         return movieDetailes;
+    }
+
+    public MutableLiveData<MovieResponse> getPopular(int pageIndex) {
+        MutableLiveData<MovieResponse> movies = new MutableLiveData<>();
+        Single<MovieResponse> movieResponseSingle = movieDbClient.getMovies(pageIndex)
+                .subscribeOn(Schedulers.io());
+
+        SingleObserver<MovieResponse> observer = new SingleObserver<MovieResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(MovieResponse value) {
+                if (value != null){
+                    Log.d(TAG, "onSuccess: nonnull");
+                    Log.d(TAG, "onSuccess: page = " + value.getPage());
+                    Log.d(TAG, "onSuccess: total pages = " + value.getTotalPages());
+                    Log.d(TAG, "onSuccess: total result = " + value.getTotalResults());
+                    Log.d(TAG, "onSuccess: result size = " + value.Result().size());
+                }else
+                    Log.d(TAG, "onSuccess: null");
+                movies.postValue(value);
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onError: " + e.getMessage());
+            }
+        };
+
+        movieResponseSingle.subscribe(observer);
+
+        return movies;
     }
 
 }

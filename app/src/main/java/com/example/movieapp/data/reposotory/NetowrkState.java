@@ -6,6 +6,7 @@ public class NetowrkState {
         NetowrkState loaded = new NetowrkState(Status.SUCCESS_, "Success");
         NetowrkState loading = new NetowrkState(Status.RUNNING_, "Running");
         NetowrkState error = new NetowrkState(Status.FAILED_, "Error");
+        NetowrkState endOfList = new NetowrkState(Status.END_OF_LIST, "no more movies");
     }
 }
 
