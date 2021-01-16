@@ -1,4 +1,4 @@
-package com.example.movieapp.moviePubular;
+package com.example.movieapp.search;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,18 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
-import com.example.movieapp.data.pojo.MovieResponse;
+import com.example.movieapp.data.pojo.SearchedMovie;
 import com.example.movieapp.data.reposotory.Status;
 import com.example.movieapp.movieDetails.SingleMovie;
 
-public class PopularMoviePagedListAdapter extends PagedListAdapter<MovieResponse.Results, RecyclerView.ViewHolder> {
-    private static final String TAG = "PopularMoviePagedListAd myTag";
+public class SearchedMoviePagedListAdapter extends PagedListAdapter<SearchedMovie.Results, RecyclerView.ViewHolder> {
     private Context context;
     public static final int MOVIE_VIEW_TYPE = 1;
     public static final int NETWORK_VIEW_TYPE = 2;
     public Status networkStatus;
 
-    public PopularMoviePagedListAdapter(@NonNull DiffUtil.ItemCallback<MovieResponse.Results> diffCallback, Context context) {
+    public SearchedMoviePagedListAdapter(@NonNull DiffUtil.ItemCallback<SearchedMovie.Results> diffCallback, Context context) {
         super(diffCallback);
         this.context = context;
     }
@@ -39,11 +38,9 @@ public class PopularMoviePagedListAdapter extends PagedListAdapter<MovieResponse
         View view;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == MOVIE_VIEW_TYPE) {
-            Log.d(TAG, "onCreateViewHolder: movie view");
             view = inflater.inflate(R.layout.movie_list_item, parent, false);
             return new MovieItemViewHolder(view);
         } else {
-            Log.d(TAG, "onCreateViewHolder: status view");
             view = inflater.inflate(R.layout.network_state_item, parent, false);
             return new NetworkStateViewHodler(view);
         }
@@ -54,10 +51,8 @@ public class PopularMoviePagedListAdapter extends PagedListAdapter<MovieResponse
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == MOVIE_VIEW_TYPE)
             ((MovieItemViewHolder) holder).bindItem(getItem(position), context);
-        else {
+        else if (getItemViewType(position) == NETWORK_VIEW_TYPE)
             ((NetworkStateViewHodler) holder).bind(networkStatus);
-            Log.d(TAG, "onBindViewHolder: " + networkStatus.name());
-        }
     }
 
 
@@ -69,18 +64,18 @@ public class PopularMoviePagedListAdapter extends PagedListAdapter<MovieResponse
     public int getItemCount() {
         if (hasExtraRows())
             return super.getItemCount() + 1;
-        else
-            return super.getItemCount();
+        else return super.getItemCount();
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if (hasExtraRows() && position == getItemCount() - 2)
+        if (hasExtraRows() && position == getItemCount() - 1)
             return NETWORK_VIEW_TYPE;
         else
             return MOVIE_VIEW_TYPE;
     }
+
 
     public void setNetworkStatus(Status networkStatus) {
         Status oldStatus = this.networkStatus;
@@ -101,7 +96,7 @@ public class PopularMoviePagedListAdapter extends PagedListAdapter<MovieResponse
             super(itemView);
         }
 
-        public void bindItem(MovieResponse.Results movie, Context context) {
+        public void bindItem(SearchedMovie.Results movie, Context context) {
             TextView title = itemView.findViewById(R.id.cv_movie_title);
             title.setText(movie.getTitle());
 
@@ -130,7 +125,6 @@ public class PopularMoviePagedListAdapter extends PagedListAdapter<MovieResponse
         }
 
         public void bind(Status status) {
-            Log.d(TAG, "bind: status : " + status.name());
             if (status.name().equals(Status.RUNNING_)) {
                 itemView.findViewById(R.id.progress_bar_item).setVisibility(View.VISIBLE);
             } else {

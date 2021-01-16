@@ -9,10 +9,15 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.movieapp.R;
@@ -65,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             mainActivityViewModel.statusLiveData.observe(this, status -> {
                 ProgressBar progressBar = findViewById(R.id.progress_bar_popular);
-                if (mainActivityViewModel.listIsEmpty() && status == Status.RUNNING_)
+                if (status == Status.RUNNING_) {
                     progressBar.setVisibility(View.VISIBLE);
+                }
                 else
                     progressBar.setVisibility(View.GONE);
 
@@ -77,8 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                     textView.setVisibility(View.GONE);
 
-                if (!mainActivityViewModel.listIsEmpty())
-                    adapter.setNetworkStatus(status);
+                adapter.setNetworkStatus(status);
 
 
                 Log.d(TAG, "onCreate: network status: " + status.name());
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    static class MovieDiffUtils extends DiffUtil.ItemCallback<MovieResponse.Results> {
+    public static class MovieDiffUtils extends DiffUtil.ItemCallback<MovieResponse.Results> {
         @Override
         public boolean areItemsTheSame(@NonNull MovieResponse.Results oldItem, @NonNull MovieResponse.Results newItem) {
             Log.d(TAG, "areItemsTheSame: " + newItem.getId());
@@ -115,5 +120,28 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "areContentsTheSame: " + newItem.getId());
             return oldItem.equals(newItem);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu: ");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+
+
+        return true;
+
+
     }
 }

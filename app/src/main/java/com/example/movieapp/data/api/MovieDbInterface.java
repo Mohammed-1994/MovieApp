@@ -2,6 +2,7 @@ package com.example.movieapp.data.api;
 
 import com.example.movieapp.data.pojo.MovieDetailes;
 import com.example.movieapp.data.pojo.MovieResponse;
+import com.example.movieapp.data.pojo.SearchedMovie;
 
 import io.reactivex.Single;
 import retrofit2.Call;
@@ -25,9 +26,18 @@ public interface MovieDbInterface {
     //https://image.tmdb.org/t/p/w342/ajKpYK7XdzIYjy9Uy8nkgRboKyv.jpg
 
 
+    //search movies
+//  https://api.themoviedb.org/3/search/movie?api_key=s&language=en-US&query=q&page=1&include_adult=false
+
+
     @GET("movie/{movie_id}")
     Single<MovieDetailes> getMovieDetails(@Path("movie_id") int id);
 
     @GET("movie/popular")
     Single<MovieResponse> getMovie(@Query("page") int page);
+
+    @GET("search/movie")
+    Single<SearchedMovie> searchMovie(@Query("query") String query);
+
+
 }

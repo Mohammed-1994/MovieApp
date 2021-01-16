@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.movieapp.data.pojo.MovieDetailes;
 import com.example.movieapp.data.pojo.MovieResponse;
+import com.example.movieapp.data.pojo.SearchedMovie;
 import com.google.gson.internal.$Gson$Preconditions;
 
 import java.io.IOException;
@@ -61,6 +62,10 @@ public class MovieDbClient {
 
     public Single<MovieResponse> getMovies(int page) {
         return movieDbInterface.getMovie(page);
+    }
+
+    public Single<SearchedMovie> searchMovie(String query) {
+        return movieDbInterface.searchMovie(query);
     }
 
 }
