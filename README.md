@@ -5,8 +5,13 @@
 - get apps info from the DB and its API
 - make queries on DB and searches 
 
-** use Retrofit 
-** user MVVM design pattern 
-** use JavaRX
-** use Dagger2 injection
-** use paging for recycler view library
+** Retrofit for networking.
+
+** MVVM design pattern 
+
+** JavaRX 
+
+** Dagger2 Dependancy Injectiong
+
+** Pagination  for RecyclerView 
+
